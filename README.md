@@ -1,2 +1,3 @@
-# implementation-RF
-In this project, I decided to implement Random Forest from scratch by the course Fast.ai
+#             Random forest from scratch
+
+In this project, I want to improve my understanding of __Random Forest__ and its implementation
