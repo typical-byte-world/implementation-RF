@@ -41,11 +41,11 @@ class DecisionTree():
         
     def find_varsplit(self):
         # max features
-        rg = int(self.c * self.max_features)
-        lenght = [i for i in range(rg)]
+        lenght = [i for i in range(self.c)]
         random.shuffle(lenght)
+        rg = len(lenght) * self.max_features
 
-        for i in lenght: self.find_better_split(i)        
+        for i in lenght[:rg]: self.find_better_split(i)        
         if self.score == float('inf'): return
         x = self.split_col
         lhs = np.nonzero(x <= self.split)[0]
