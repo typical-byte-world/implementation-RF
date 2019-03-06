@@ -1,3 +1,8 @@
+import numpy as np
+import pandas as np
+import math, random
+from sklearn import metrics
+
 class TreeEnsemble():
     def __init__(self, x, y, n_trees, sample_sz, min_leaf=5, max_features=None):
         np.random.seed(42)
@@ -6,9 +11,7 @@ class TreeEnsemble():
         self.y = y
         self.sample_sz = sample_sz
         self.min_leaf = min_leaf
-        if not max_features: self.max_features = 1
-        else:
-            self.max_features = max_features
+		self.max_features = 1 if not max_features else max_features
         self.trees = [self.create_tree() for i in range(n_trees)]
 
     def create_tree(self):
@@ -22,6 +25,21 @@ class TreeEnsemble():
         
     def predict(self, x):
         return np.mean([t.predict(x) for t in self.trees], axis=0)
+    
+    def feature_importance(self):
+        x_imp = self.x.copy()        
+        tmp = self.predict(x_imp)        
+        start_score = metrics.r2_score(self.y, tmp)
+        importance = dict()
+        
+        for i, n in zip(range(self.c), list(X_train.columns)):
+            now = x_imp[:,i]
+            x_imp[:,i] = np.random.permutation(now)
+            end_score = metrics.r2_score(self.y, self.predict(x_imp))
+            importance[n] = start_score - end_score           
+            x_imp[:,i] = now
+        return sorted(importance.items(), key=lambda kv: kv[1], reverse=True)
+    
 
 def std_agg(num_sampl, s1, s2): return math.sqrt((s2/num_sampl) - (s1/num_sampl)**2)
 
@@ -43,7 +61,7 @@ class DecisionTree():
         # max features
         lenght = [i for i in range(self.c)]
         random.shuffle(lenght)
-        rg = len(lenght) * self.max_features
+        rg = int(len(lenght) * self.max_features)
 
         for i in lenght[:rg]: self.find_better_split(i)        
         if self.score == float('inf'): return
