@@ -2,6 +2,8 @@ import numpy as np
 import pandas as np
 import math, random
 from sklearn import metrics
+from concurrent.futures import ProcessPoolExecutor
+
 
 class TreeEnsemble():
     def __init__(self, x, y, n_trees, sample_sz, min_leaf=5, max_features=None):
@@ -26,6 +28,7 @@ class TreeEnsemble():
     def predict(self, x):
         return np.mean([t.predict(x) for t in self.trees], axis=0)
     
+	
     def feature_importance(self):
         x_imp = self.x.copy()        
         tmp = self.predict(x_imp)        
@@ -39,6 +42,14 @@ class TreeEnsemble():
             importance[n] = start_score - end_score           
             x_imp[:,i] = now
         return sorted(importance.items(), key=lambda kv: kv[1], reverse=True)
+
+    def confidence_on_variance(self, x_train, n_jobs=4):
+        def get_predicts(t): t.predict(x_train)        
+        predicts = list(ProcessPoolExecutor(n_jobs).map(get_predicts, self.trees))
+        predicts = np.stack(predicts)
+        
+        self.pred_mean = np.mean(predicts[:,0])
+        self.pred_std  = np.std(predicts[:,0])
     
 
 def std_agg(num_sampl, s1, s2): return math.sqrt((s2/num_sampl) - (s1/num_sampl)**2)
