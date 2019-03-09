@@ -43,13 +43,12 @@ class TreeEnsemble():
             x_imp[:,i] = now
         return sorted(importance.items(), key=lambda kv: kv[1], reverse=True)
 
-    def confidence_on_variance(self, x_train, n_jobs=4):
-        def get_predicts(t): t.predict(x_train)        
-        predicts = list(ProcessPoolExecutor(n_jobs).map(get_predicts, self.trees))
-        predicts = np.stack(predicts)
-        
-        self.pred_mean = np.mean(predicts[:,0])
-        self.pred_std  = np.std(predicts[:,0])
+    def confidence_on_variance(self, x):
+        def get_predicts(t): return t.predict(x)
+        pred = np.stack(map(get_predicts, self.trees))
+        self.pred_mean = np.mean(pred[:,0])
+        self.pred_std = np.std(pred[:,0])        
+        print(f"Mean is {self.pred_mean}.\nStd is {self.pred_std}")
     
 
 def std_agg(num_sampl, s1, s2): return math.sqrt((s2/num_sampl) - (s1/num_sampl)**2)
