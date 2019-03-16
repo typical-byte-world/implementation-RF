@@ -1,3 +1,7 @@
-#             Random forest from scratch
+#             In this repo i want to implement some machine learning algorithms
 
-In this project, I want to improve my understanding of __Random Forest__ and its implementation
+### In this project i want to improve my understanding algorithms
+### I'm welcome all contributions and help
+
+For now i have:
+*  __Random Forest__
