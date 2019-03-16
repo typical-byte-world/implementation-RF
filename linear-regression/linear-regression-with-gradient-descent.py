@@ -1,14 +1,5 @@
 import numpy as np
 
-# def compute_error_for_given_points(b, m ,data):
-#     total_err = 0
-#     for i in range(len(data)):
-#         x = data[i, 0]
-#         y = data[i, 1]
-#         total_err += (y - (m * x + b)) ** 2
-#     return total_err / float(len(data))
-
-
 def step_gradient(b_current, m_current, points, learningRate):
     b_gradient = 0
     m_gradient = 0
