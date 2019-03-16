@@ -13,7 +13,7 @@ class TreeEnsemble():
         self.y = y
         self.sample_sz = sample_sz
         self.min_leaf = min_leaf
-		self.max_features = 1 if max_features is None else max_features
+	self.max_features = 1 if max_features is None else max_features
         self.trees = [self.create_tree() for i in range(n_trees)]
 
     def create_tree(self):
