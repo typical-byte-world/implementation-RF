@@ -5,3 +5,4 @@
 
 For now i have:
 *  __Random Forest__
+*  __Linear Regression with gradient descent__

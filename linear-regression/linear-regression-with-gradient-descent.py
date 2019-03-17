@@ -4,7 +4,7 @@ def step_gradient(b_current, m_current, points, learningRate):
     b_gradient = 0
     m_gradient = 0
     N = float(len(points))
-    for i in range(0, len(points)):
+    for i in range(N):
         x = points[i, 0]
         y = points[i, 1]
         b_gradient += -(2/N) * (y - ((m_current * x) + b_current))
